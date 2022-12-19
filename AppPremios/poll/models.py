@@ -1,5 +1,8 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib import admin
+
+
 import datetime
 
 class Question(models.Model):
@@ -9,9 +12,15 @@ class Question(models.Model):
   def __str__(self):
     return self.question_text
   
+  #sirve para mejorar la UI del Django-admin
+  @admin.display(
+        boolean=True,
+        ordering='pub_date',
+        description='Published recently',
+    )
   #definir que una pregunta es reciente cuando es igual o menor a la fecha actual
   def was_published_recently(self):
-    return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+    return timezone.now()>= self.pub_date >= timezone.now() - datetime.timedelta(days=1)
   
 class Choise(models.Model):
   #on_delete=models.CASCADE: elimina la pregunta y todas las respuestas que esta tenga
